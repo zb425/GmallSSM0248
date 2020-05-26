@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.java416.gmall.dao.LibraryComeSendMapper" >
+  <resultMap id="BaseResultMap" type="com.java416.gmall.bean.LibraryComeSend" >
+    <id column="library_cs_id" property="libraryCsId" jdbcType="CHAR" />
+    <result column="library_id" property="libraryId" jdbcType="CHAR" />
+    <result column="library_cs_name" property="libraryCsName" jdbcType="VARCHAR" />
+    <result column="library_cs_type" property="libraryCsType" jdbcType="INTEGER" />
+    <result column="library_cs_count" property="libraryCsCount" jdbcType="INTEGER" />
+    <result column="library_cs_msg" property="libraryCsMsg" jdbcType="VARCHAR" />
+    <result column="library_cs_time" property="libraryCsTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    library_cs_id, library_id, library_cs_name, library_cs_type, library_cs_count, library_cs_msg, 
+    library_cs_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.java416.gmall.bean.LibraryComeSendExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from library_come_send
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from library_come_send
+    where library_cs_id = #{libraryCsId,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from library_come_send
+    where library_cs_id = #{libraryCsId,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.java416.gmall.bean.LibraryComeSendExample" >
+    delete from library_come_send
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.java416.gmall.bean.LibraryComeSend" >
+    insert into library_come_send (library_cs_id, library_id, library_cs_name, 
+      library_cs_type, library_cs_count, library_cs_msg, 
+      library_cs_time)
+    values (#{libraryCsId,jdbcType=CHAR}, #{libraryId,jdbcType=CHAR}, #{libraryCsName,jdbcType=VARCHAR}, 
+      #{libraryCsType,jdbcType=INTEGER}, #{libraryCsCount,jdbcType=INTEGER}, #{libraryCsMsg,jdbcType=VARCHAR}, 
+      #{libraryCsTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.java416.gmall.bean.LibraryComeSend" >
+    insert into library_come_send
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="libraryCsId != null" >
+        library_cs_id,
+      </if>
+      <if test="libraryId != null" >
+        library_id,
+      </if>
+      <if test="libraryCsName != null" >
+        library_cs_name,
+      </if>
+      <if test="libraryCsType != null" >
+        library_cs_type,
+      </if>
+      <if test="libraryCsCount != null" >
+        library_cs_count,
+      </if>
+      <if test="libraryCsMsg != null" >
+        library_cs_msg,
+      </if>
+      <if test="libraryCsTime != null" >
+        library_cs_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="libraryCsId != null" >
+        #{libraryCsId,jdbcType=CHAR},
+      </if>
+      <if test="libraryId != null" >
+        #{libraryId,jdbcType=CHAR},
+      </if>
+      <if test="libraryCsName != null" >
+        #{libraryCsName,jdbcType=VARCHAR},
+      </if>
+      <if test="libraryCsType != null" >
+        #{libraryCsType,jdbcType=INTEGER},
+      </if>
+      <if test="libraryCsCount != null" >
+        #{libraryCsCount,jdbcType=INTEGER},
+      </if>
+      <if test="libraryCsMsg != null" >
+        #{libraryCsMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="libraryCsTime != null" >
+        #{libraryCsTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.java416.gmall.bean.LibraryComeSendExample" resultType="java.lang.Integer" >
+    select count(*) from library_come_send
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update library_come_send
+    <set >
+      <if test="record.libraryCsId != null" >
+        library_cs_id = #{record.libraryCsId,jdbcType=CHAR},
+      </if>
+      <if test="record.libraryId != null" >
+        library_id = #{record.libraryId,jdbcType=CHAR},
+      </if>
+      <if test="record.libraryCsName != null" >
+        library_cs_name = #{record.libraryCsName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.libraryCsType != null" >
+        library_cs_type = #{record.libraryCsType,jdbcType=INTEGER},
+      </if>
+      <if test="record.libraryCsCount != null" >
+        library_cs_count = #{record.libraryCsCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.libraryCsMsg != null" >
+        library_cs_msg = #{record.libraryCsMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.libraryCsTime != null" >
+        library_cs_time = #{record.libraryCsTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update library_come_send
+    set library_cs_id = #{record.libraryCsId,jdbcType=CHAR},
+      library_id = #{record.libraryId,jdbcType=CHAR},
+      library_cs_name = #{record.libraryCsName,jdbcType=VARCHAR},
+      library_cs_type = #{record.libraryCsType,jdbcType=INTEGER},
+      library_cs_count = #{record.libraryCsCount,jdbcType=INTEGER},
+      library_cs_msg = #{record.libraryCsMsg,jdbcType=VARCHAR},
+      library_cs_time = #{record.libraryCsTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.java416.gmall.bean.LibraryComeSend" >
+    update library_come_send
+    <set >
+      <if test="libraryId != null" >
+        library_id = #{libraryId,jdbcType=CHAR},
+      </if>
+      <if test="libraryCsName != null" >
+        library_cs_name = #{libraryCsName,jdbcType=VARCHAR},
+      </if>
+      <if test="libraryCsType != null" >
+        library_cs_type = #{libraryCsType,jdbcType=INTEGER},
+      </if>
+      <if test="libraryCsCount != null" >
+        library_cs_count = #{libraryCsCount,jdbcType=INTEGER},
+      </if>
+      <if test="libraryCsMsg != null" >
+        library_cs_msg = #{libraryCsMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="libraryCsTime != null" >
+        library_cs_time = #{libraryCsTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where library_cs_id = #{libraryCsId,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.java416.gmall.bean.LibraryComeSend" >
+    update library_come_send
+    set library_id = #{libraryId,jdbcType=CHAR},
+      library_cs_name = #{libraryCsName,jdbcType=VARCHAR},
+      library_cs_type = #{libraryCsType,jdbcType=INTEGER},
+      library_cs_count = #{libraryCsCount,jdbcType=INTEGER},
+      library_cs_msg = #{libraryCsMsg,jdbcType=VARCHAR},
+      library_cs_time = #{libraryCsTime,jdbcType=TIMESTAMP}
+    where library_cs_id = #{libraryCsId,jdbcType=CHAR}
+  </update>
+</mapper>

@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.java416.gmall.dao.OrderBookMapper" >
+  <resultMap id="BaseResultMap" type="com.java416.gmall.bean.OrderBook" >
+    <id column="o_id" property="oId" jdbcType="CHAR" />
+    <result column="book_id" property="bookId" jdbcType="CHAR" />
+    <result column="library_cs_id" property="libraryCsId" jdbcType="CHAR" />
+    <result column="u_id" property="uId" jdbcType="CHAR" />
+    <result column="o_code" property="oCode" jdbcType="CHAR" />
+    <result column="o_total" property="oTotal" jdbcType="REAL" />
+    <result column="o_pay" property="oPay" jdbcType="REAL" />
+    <result column="o_retrun" property="oRetrun" jdbcType="REAL" />
+    <result column="o_discount" property="oDiscount" jdbcType="REAL" />
+    <result column="o_paly" property="oPaly" jdbcType="INTEGER" />
+    <result column="o_state" property="oState" jdbcType="INTEGER" />
+    <result column="o_wuliucode" property="oWuliucode" jdbcType="CHAR" />
+    <result column="o_jf" property="oJf" jdbcType="INTEGER" />
+    <result column="o_momer" property="oMomer" jdbcType="VARCHAR" />
+    <result column="o_s_sstate" property="oSSstate" jdbcType="INTEGER" />
+    <result column="o_createtime" property="oCreatetime" jdbcType="TIMESTAMP" />
+    <result column="o_c_createtime" property="oCCreatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    o_id, book_id, library_cs_id, u_id, o_code, o_total, o_pay, o_retrun, o_discount, 
+    o_paly, o_state, o_wuliucode, o_jf, o_momer, o_s_sstate, o_createtime, o_c_createtime
+  </sql>
+  <select id="queryOrderBySql" resultMap="BaseResultMap" parameterType="map">
+        select * from order_book where u_id=#{id} and o_s_sstate=0 limit #{currIndex} , #{pageSize}
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.java416.gmall.bean.OrderBookExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from order_book
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from order_book
+    where o_id = #{oId,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from order_book
+    where o_id = #{oId,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.java416.gmall.bean.OrderBookExample" >
+    delete from order_book
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.java416.gmall.bean.OrderBook" >
+    insert into order_book (o_id, book_id, library_cs_id, 
+      u_id, o_code, o_total, o_pay, 
+      o_retrun, o_discount, o_paly, 
+      o_state, o_wuliucode, o_jf, 
+      o_momer, o_s_sstate, o_createtime, 
+      o_c_createtime)
+    values (#{oId,jdbcType=CHAR}, #{bookId,jdbcType=CHAR}, #{libraryCsId,jdbcType=CHAR}, 
+      #{uId,jdbcType=CHAR}, #{oCode,jdbcType=CHAR}, #{oTotal,jdbcType=REAL}, #{oPay,jdbcType=REAL}, 
+      #{oRetrun,jdbcType=REAL}, #{oDiscount,jdbcType=REAL}, #{oPaly,jdbcType=INTEGER}, 
+      #{oState,jdbcType=INTEGER}, #{oWuliucode,jdbcType=CHAR}, #{oJf,jdbcType=INTEGER}, 
+      #{oMomer,jdbcType=VARCHAR}, #{oSSstate,jdbcType=INTEGER}, #{oCreatetime,jdbcType=TIMESTAMP}, 
+      #{oCCreatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.java416.gmall.bean.OrderBook" >
+    insert into order_book
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="oId != null" >
+        o_id,
+      </if>
+      <if test="bookId != null" >
+        book_id,
+      </if>
+      <if test="libraryCsId != null" >
+        library_cs_id,
+      </if>
+      <if test="uId != null" >
+        u_id,
+      </if>
+      <if test="oCode != null" >
+        o_code,
+      </if>
+      <if test="oTotal != null" >
+        o_total,
+      </if>
+      <if test="oPay != null" >
+        o_pay,
+      </if>
+      <if test="oRetrun != null" >
+        o_retrun,
+      </if>
+      <if test="oDiscount != null" >
+        o_discount,
+      </if>
+      <if test="oPaly != null" >
+        o_paly,
+      </if>
+      <if test="oState != null" >
+        o_state,
+      </if>
+      <if test="oWuliucode != null" >
+        o_wuliucode,
+      </if>
+      <if test="oJf != null" >
+        o_jf,
+      </if>
+      <if test="oMomer != null" >
+        o_momer,
+      </if>
+      <if test="oSSstate != null" >
+        o_s_sstate,
+      </if>
+      <if test="oCreatetime != null" >
+        o_createtime,
+      </if>
+      <if test="oCCreatetime != null" >
+        o_c_createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="oId != null" >
+        #{oId,jdbcType=CHAR},
+      </if>
+      <if test="bookId != null" >
+        #{bookId,jdbcType=CHAR},
+      </if>
+      <if test="libraryCsId != null" >
+        #{libraryCsId,jdbcType=CHAR},
+      </if>
+      <if test="uId != null" >
+        #{uId,jdbcType=CHAR},
+      </if>
+      <if test="oCode != null" >
+        #{oCode,jdbcType=CHAR},
+      </if>
+      <if test="oTotal != null" >
+        #{oTotal,jdbcType=REAL},
+      </if>
+      <if test="oPay != null" >
+        #{oPay,jdbcType=REAL},
+      </if>
+      <if test="oRetrun != null" >
+        #{oRetrun,jdbcType=REAL},
+      </if>
+      <if test="oDiscount != null" >
+        #{oDiscount,jdbcType=REAL},
+      </if>
+      <if test="oPaly != null" >
+        #{oPaly,jdbcType=INTEGER},
+      </if>
+      <if test="oState != null" >
+        #{oState,jdbcType=INTEGER},
+      </if>
+      <if test="oWuliucode != null" >
+        #{oWuliucode,jdbcType=CHAR},
+      </if>
+      <if test="oJf != null" >
+        #{oJf,jdbcType=INTEGER},
+      </if>
+      <if test="oMomer != null" >
+        #{oMomer,jdbcType=VARCHAR},
+      </if>
+      <if test="oSSstate != null" >
+        #{oSSstate,jdbcType=INTEGER},
+      </if>
+      <if test="oCreatetime != null" >
+        #{oCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oCCreatetime != null" >
+        #{oCCreatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.java416.gmall.bean.OrderBookExample" resultType="java.lang.Integer" >
+    select count(*) from order_book
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update order_book
+    <set >
+      <if test="record.oId != null" >
+        o_id = #{record.oId,jdbcType=CHAR},
+      </if>
+      <if test="record.bookId != null" >
+        book_id = #{record.bookId,jdbcType=CHAR},
+      </if>
+      <if test="record.libraryCsId != null" >
+        library_cs_id = #{record.libraryCsId,jdbcType=CHAR},
+      </if>
+      <if test="record.uId != null" >
+        u_id = #{record.uId,jdbcType=CHAR},
+      </if>
+      <if test="record.oCode != null" >
+        o_code = #{record.oCode,jdbcType=CHAR},
+      </if>
+      <if test="record.oTotal != null" >
+        o_total = #{record.oTotal,jdbcType=REAL},
+      </if>
+      <if test="record.oPay != null" >
+        o_pay = #{record.oPay,jdbcType=REAL},
+      </if>
+      <if test="record.oRetrun != null" >
+        o_retrun = #{record.oRetrun,jdbcType=REAL},
+      </if>
+      <if test="record.oDiscount != null" >
+        o_discount = #{record.oDiscount,jdbcType=REAL},
+      </if>
+      <if test="record.oPaly != null" >
+        o_paly = #{record.oPaly,jdbcType=INTEGER},
+      </if>
+      <if test="record.oState != null" >
+        o_state = #{record.oState,jdbcType=INTEGER},
+      </if>
+      <if test="record.oWuliucode != null" >
+        o_wuliucode = #{record.oWuliucode,jdbcType=CHAR},
+      </if>
+      <if test="record.oJf != null" >
+        o_jf = #{record.oJf,jdbcType=INTEGER},
+      </if>
+      <if test="record.oMomer != null" >
+        o_momer = #{record.oMomer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.oSSstate != null" >
+        o_s_sstate = #{record.oSSstate,jdbcType=INTEGER},
+      </if>
+      <if test="record.oCreatetime != null" >
+        o_createtime = #{record.oCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.oCCreatetime != null" >
+        o_c_createtime = #{record.oCCreatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update order_book
+    set o_id = #{record.oId,jdbcType=CHAR},
+      book_id = #{record.bookId,jdbcType=CHAR},
+      library_cs_id = #{record.libraryCsId,jdbcType=CHAR},
+      u_id = #{record.uId,jdbcType=CHAR},
+      o_code = #{record.oCode,jdbcType=CHAR},
+      o_total = #{record.oTotal,jdbcType=REAL},
+      o_pay = #{record.oPay,jdbcType=REAL},
+      o_retrun = #{record.oRetrun,jdbcType=REAL},
+      o_discount = #{record.oDiscount,jdbcType=REAL},
+      o_paly = #{record.oPaly,jdbcType=INTEGER},
+      o_state = #{record.oState,jdbcType=INTEGER},
+      o_wuliucode = #{record.oWuliucode,jdbcType=CHAR},
+      o_jf = #{record.oJf,jdbcType=INTEGER},
+      o_momer = #{record.oMomer,jdbcType=VARCHAR},
+      o_s_sstate = #{record.oSSstate,jdbcType=INTEGER},
+      o_createtime = #{record.oCreatetime,jdbcType=TIMESTAMP},
+      o_c_createtime = #{record.oCCreatetime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.java416.gmall.bean.OrderBook" >
+    update order_book
+    <set >
+      <if test="bookId != null" >
+        book_id = #{bookId,jdbcType=CHAR},
+      </if>
+      <if test="libraryCsId != null" >
+        library_cs_id = #{libraryCsId,jdbcType=CHAR},
+      </if>
+      <if test="uId != null" >
+        u_id = #{uId,jdbcType=CHAR},
+      </if>
+      <if test="oCode != null" >
+        o_code = #{oCode,jdbcType=CHAR},
+      </if>
+      <if test="oTotal != null" >
+        o_total = #{oTotal,jdbcType=REAL},
+      </if>
+      <if test="oPay != null" >
+        o_pay = #{oPay,jdbcType=REAL},
+      </if>
+      <if test="oRetrun != null" >
+        o_retrun = #{oRetrun,jdbcType=REAL},
+      </if>
+      <if test="oDiscount != null" >
+        o_discount = #{oDiscount,jdbcType=REAL},
+      </if>
+      <if test="oPaly != null" >
+        o_paly = #{oPaly,jdbcType=INTEGER},
+      </if>
+      <if test="oState != null" >
+        o_state = #{oState,jdbcType=INTEGER},
+      </if>
+      <if test="oWuliucode != null" >
+        o_wuliucode = #{oWuliucode,jdbcType=CHAR},
+      </if>
+      <if test="oJf != null" >
+        o_jf = #{oJf,jdbcType=INTEGER},
+      </if>
+      <if test="oMomer != null" >
+        o_momer = #{oMomer,jdbcType=VARCHAR},
+      </if>
+      <if test="oSSstate != null" >
+        o_s_sstate = #{oSSstate,jdbcType=INTEGER},
+      </if>
+      <if test="oCreatetime != null" >
+        o_createtime = #{oCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oCCreatetime != null" >
+        o_c_createtime = #{oCCreatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where o_id = #{oId,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.java416.gmall.bean.OrderBook" >
+    update order_book
+    set book_id = #{bookId,jdbcType=CHAR},
+      library_cs_id = #{libraryCsId,jdbcType=CHAR},
+      u_id = #{uId,jdbcType=CHAR},
+      o_code = #{oCode,jdbcType=CHAR},
+      o_total = #{oTotal,jdbcType=REAL},
+      o_pay = #{oPay,jdbcType=REAL},
+      o_retrun = #{oRetrun,jdbcType=REAL},
+      o_discount = #{oDiscount,jdbcType=REAL},
+      o_paly = #{oPaly,jdbcType=INTEGER},
+      o_state = #{oState,jdbcType=INTEGER},
+      o_wuliucode = #{oWuliucode,jdbcType=CHAR},
+      o_jf = #{oJf,jdbcType=INTEGER},
+      o_momer = #{oMomer,jdbcType=VARCHAR},
+      o_s_sstate = #{oSSstate,jdbcType=INTEGER},
+      o_createtime = #{oCreatetime,jdbcType=TIMESTAMP},
+      o_c_createtime = #{oCCreatetime,jdbcType=TIMESTAMP}
+    where o_id = #{oId,jdbcType=CHAR}
+  </update>
+</mapper>

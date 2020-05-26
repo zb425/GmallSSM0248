@@ -1,0 +1,405 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>订单管理</title>
+    <script type="text/javascript" src="static/jquery-easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="static/jquery-easyui/jquery.easyui.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="static/css/comm.css"/>
+    <link type="text/css" rel="stylesheet" href="static/jquery-easyui/themes/default/easyui.css">
+    <link type="text/css" rel="stylesheet" href="static/jquery-easyui/themes/icon.css">
+    <script type="text/javascript" src="static/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
+</head>
+<body>
+<div class="easyui-layout" data-options="fit:true">
+    <div data-options="region:'north',title:'订单总列表',split:true" style="height:50%">
+        <!-- 数据表 --><!--title="商家列表"-->
+        <table class="easyui-datagrid"  fit="true" fitColumns="true"
+               toolbar="#orderTool"
+               striped="true" rownumbers="true" pagination="true" remoteSort="false" id="orderTg">
+
+        </table>
+        <!-- /数据表 -->
+
+        <!-- 数据表工具栏 -->
+        <div class="toolbar" id="orderTool">
+            <div class="search-div">
+                <label>订单编号：</label>
+                <input type="text" class="easyui-textbox" id="order_Id"/>
+                <label>创库ID：</label>
+                <input type="text" class="easyui-textbox" id="libraryOrder_Id"/>
+                <label>支付方式：</label>
+                <select class="easyui-combobox" name="libraryOrder_Pay"  id="libraryOrder_Pay" data-options="panelHeight:'auto'" style="width: 100px; height: 40px;">
+                    <option value="-1" selected="selected">--请选择--</option>
+                    <option value="1">线上支付</option>
+                    <option value="0">线下支付</option>
+                </select>
+                <label>订单状态：</label>
+                <select class="easyui-combobox" name="libraryOrder_state"  id="libraryOrder_state" data-options="panelHeight:'auto'" style="width: 100px; height: 40px;">
+                    <option value="-1" selected="selected">--请选择--</option>
+                    <option value="1">成功</option>
+                    <option value="0">失败</option>
+                </select>
+                <label>收货状态：</label>
+                <select class="easyui-combobox" name="libraryOrder_success"  id="libraryOrder_success" data-options="panelHeight:'auto'" style="width: 100px; height: 40px;">
+                    <option value="-1" selected="selected">--请选择--</option>
+                    <option value="1">已收货</option>
+                    <option value="0">未收货</option>
+                </select>
+                <a href="#" class="easyui-linkbutton" iconCls="icon-search" style="width: 100px; height: 40px;" id="searchOrder">搜索</a>
+            </div>
+            <div class="ctrl-div">
+               <!-- <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" id="orderAdd">新增</a>-->
+                <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" id="orderUpate">编辑</a>
+                <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" id="multOrderDelete">批量删除</a>
+            </div>
+        </div>
+        <!-- /数据表工具栏 -->
+
+    </div>
+
+    <div class="tree-div" data-options="region:'west',title:'商家列表',split:true" style="width:20%">
+        <div class="easyui-panel"  data-options="fit:true">
+            <ul  id="bookManager_url">
+
+            </ul>
+        </div>
+    </div>
+
+    <div data-options="region:'center',title:'商家订单'" style="padding:5px;background:#eee;">
+        <!-- 数据表 --><!-- title="商家列表"-->
+        <table class="easyui-datagrid" fit="true" fitColumns="true"
+               toolbar="#orderCenterTool"
+               striped="true" rownumbers="true" pagination="true" remoteSort="false" id="orderCenterTg">
+
+        </table>
+        <!-- /数据表 -->
+
+        <!-- 数据表工具栏 -->
+        <div class="toolbar" id="orderCenterTool">
+            <div class="search-div">
+                <label>货源编号：</label>
+                <input type="text" class="easyui-textbox" id="orderCenter_Id"/>
+                <label>进/发货状态：</label>
+                <select class="easyui-combobox" name="orderCenter_state"  id="orderCenter_state" data-options="panelHeight:'auto'" style="width: 100px; height: 40px;">
+                    <option value="-1" selected="selected">--请选择--</option>
+                    <option value="1">未发货</option>
+                    <option value="0">已发货</option>
+                    <option value="2">进货</option>
+                </select>
+                <a href="#" class="easyui-linkbutton" iconCls="icon-search" style="width: 100px; height: 40px;" id="searchOrderCenter">搜索</a>
+            </div>
+
+            <div class="ctrl-div">
+                    <!-- <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" id="orderCenterAdd">新增</a>-->
+                    <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" id="orderCenterUpate">编辑</a>
+                    <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" id="multOrderCenterDelete">批量删除</a>
+            </div>
+        </div>
+        <!-- /数据表工具栏 -->
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    var rules=[{
+        ruleCode : '0',
+        name : '未发送'
+    },{
+        ruleCode : '1',
+        name : '发货'
+    },{
+        ruleCode : '2',
+        name : '确认退款'
+    },{
+        ruleCode : '3',
+        name : '退款成功'
+    }]
+    var libraryId;
+    $(function () {
+       ajaxLibraryOrderAll();
+       ajaxOrderAll();
+    });
+    
+    function ajaxOrderAll() {
+        $('#orderTg').datagrid({
+            url:'orderSelectAll',
+            columns:[[
+                {title: '全选', field: 'ck',checkbox : true, sortable: false},
+                {field:'oId',align:'center',title:'订单ID',width:100},
+                {field:'bookId',align:'center',title:'图书ID',width:100},
+                {field:'libraryCsId',align:'center',title:'货源ID',width:100},
+                {field:'uId',align:'center',title:'用户ID',width:100},
+                {field:'oCode',align:'center',title:'订单号',width:100},
+                {field:'oTotal',align:'center',title:'订单总额',width:100},
+                {field:'oPay',align:'center',title:'应付金额',width:100},
+                {field:'oRetrun',align:'center',title:'运费金额',width:100},
+                {field:'oDiscount',align:'center',title:'会员折扣',width:100},
+                {field:'oPaly',align:'center',title:'支付方式',formatter:payMeans,width:100},
+                {field:'oState',align:'center',title:'订单状态',formatter:orderStates,width:100},
+                {field:'oWuliucode',align:'center',title:'物流单号',width:100},
+                {field:'oJf',align:'center',title:'获得积分',width:100},
+                {field:'oMomer',align:'center',title:'订单备注',width:100},
+                {field:'oSSstate',align:'center',title:'收货状态',formatter:orderCommen,width:100},
+                {field:'oCreatetime',align:'center',title:'发货时间',formatter:formatDatebox,width:100},
+                {field:'oCCreatetime',align:'center',title:'创建时间',formatter:formatDatebox,width:100},
+            ]],
+            fitColumns:true,
+            /*pagination:true,*/
+            rowNumbers:true,
+            singleSelect: false,
+        });
+    }
+
+    function payMeans(text) {
+        if (text=='1'){
+            return "在线支付";
+        }else{
+            return "线下支付";
+        }
+    }
+
+    function orderStates(text) {
+        if (text=='1'){
+            return "成功";
+        }else{
+            return "失败";
+        }
+    }
+
+    function orderCommen(text) {
+        if (text=='1'){
+            return "已收货";
+        }else if (text == '0'){
+            return "未收货";
+        }else if (text == '2'){
+            return "退货";
+        }else if (text == '3'){
+            return "退货成功"
+        }
+    }
+
+    function formatDatebox(milliseconds) {
+        if (milliseconds != "" && milliseconds != null
+            && milliseconds != "null") {
+            var datetime = new Date();
+            datetime.setTime(milliseconds);
+            var year = datetime.getFullYear();
+            var month = datetime.getMonth() + 1 < 10 ? "0"
+                + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
+            var date = datetime.getDate() < 10 ? "0" + datetime.getDate()
+                : datetime.getDate();
+            var hour = datetime.getHours() < 10 ? "0" + datetime.getHours()
+                : datetime.getHours();
+            var minute = datetime.getMinutes() < 10 ? "0"
+                + datetime.getMinutes() : datetime.getMinutes();
+            var second = datetime.getSeconds() < 10 ? "0"
+                + datetime.getSeconds() : datetime.getSeconds();
+            return year + "-" + month + "-" + date + " " + hour + ":" + minute
+                + ":" + second;
+        } else {
+            return "";
+        }
+    }
+
+    function ajaxLibraryOrderAll() {
+        $('#bookManager_url').tree({
+            url:'selectLibraryTree',
+            onDblClick: function(node){
+                libraryId=node.id;
+               // alert(node.id);
+               /* bookId=node.id;
+                $('#tg').datagrid('options').url='/menuTree/bookInfo/'+node.id;
+                DataGrid(node.id);*/
+               libraryComeSend(node.id);
+            }
+        });
+    }
+
+    //var editRow=undefined;
+    function libraryComeSend(id) {
+        $('#orderCenterTg').datagrid({
+            url:'libraryComeSendSelectAll/'+id,
+            columns:[[
+                {title: '全选', field: 'ck',checkbox : true, sortable: false},
+                {field:'libraryCsId',align:'center',title:'货源ID',width:100},
+                {field:'libraryId',align:'center',title:'供应商ID',width:100},
+                {field:'libraryCsName',align:'center',title:'图书名称',width:100},
+                {field:'libraryCsType',align:'center',title:'类型',editor:{
+                        type : 'combobox',
+                        options : {
+                            valueField : 'ruleCode',
+                            textField : 'name',
+                            data : rules,
+                            //required : true,
+                            panelHeight:'auto'//下拉列表高度-自动
+                        }
+                    },formatter:comeSendType,width:100},
+                {field:'libraryCsCount',align:'center',title:'数量',width:100},
+                {field:'libraryCsMsg',align:'center',title:'详细描述',width:100},
+                {field:'libraryCsTime',align:'center',title:'创建时间',formatter:formatDatebox,width:100},
+            ]],
+            fitColumns:true,
+            rowNumbers:true,
+            singleSelect: false,
+            onClickRow:function(rowIndex, rowData){
+                var rows = $("#orderCenterTg").datagrid("getSelections");
+                if (rows.length == 1){
+                    $("#orderCenterTg").datagrid('beginEdit', rowIndex);//设置可编辑状态
+
+                }else{
+                    $("#orderCenterTg").datagrid('endEdit', rowIndex);
+                }
+
+
+            },
+            onBeforeEdit:function(index,row){
+               //alert("1111");
+            },
+            onAfterEdit:function(index, row, changes){
+                $("#orderCenterTg").datagrid('selectRow', index);
+                var libraryCsId=$("#orderCenterTg").datagrid('getSelected').libraryCsId;
+                var libraryCsType = $("#orderCenterTg").datagrid('getSelected').libraryCsType;
+                updateLibraryComeSend(libraryCsId,libraryCsType);
+                row.editing = false;
+                $("#orderCenterTg").datagrid('unselectRow', index);
+            }
+        });
+    }
+
+    function comeSendType(text) {
+        if (text =='1'){
+            return "已发货";
+        }else if (text =='0'){
+            return "未发货";
+        }else{
+            return "进货";
+        }
+    }
+
+    function formatDatebox(milliseconds) {
+        if (milliseconds != "" && milliseconds != null
+            && milliseconds != "null") {
+            var datetime = new Date();
+            datetime.setTime(milliseconds);
+            var year = datetime.getFullYear();
+            var month = datetime.getMonth() + 1 < 10 ? "0"
+                + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
+            var date = datetime.getDate() < 10 ? "0" + datetime.getDate()
+                : datetime.getDate();
+            var hour = datetime.getHours() < 10 ? "0" + datetime.getHours()
+                : datetime.getHours();
+            var minute = datetime.getMinutes() < 10 ? "0"
+                + datetime.getMinutes() : datetime.getMinutes();
+            var second = datetime.getSeconds() < 10 ? "0"
+                + datetime.getSeconds() : datetime.getSeconds();
+            return year + "-" + month + "-" + date + " " + hour + ":" + minute
+                + ":" + second;
+        } else {
+            return "";
+        }
+    }
+
+    $('#searchOrder').linkbutton({
+       onClick:function () {
+           var order_Id=$('#order_Id').textbox('getValue');
+           var libraryOrder_Id=$('#libraryOrder_Id').textbox('getValue');
+           var libraryOrder_Pay=$('#libraryOrder_Pay').combobox('getValue');
+           var libraryOrder_state=$('#libraryOrder_state').combobox('getValue');
+           var libraryOrder_success=$('#libraryOrder_success').combobox('getValue');
+
+           //alert(order_Id+libraryOrder_Id+libraryOrder_Pay+libraryOrder_state+libraryOrder_success);
+           $.ajax({
+               url:'expFindOrder' ,
+               type:'POST',
+               data:{"order_Id":order_Id,"libraryOrder_Id":libraryOrder_Id,"libraryOrder_Pay":libraryOrder_Pay,"libraryOrder_state":libraryOrder_state,"libraryOrder_success":libraryOrder_success},
+               //traditional:true,
+               success:function (result) {
+                   $.messager.alert("提示","查询成功","info");
+                   $('#orderTg').datagrid('loadData',result.data);
+               }
+               ,
+               error:function (result) {
+                   $.messager.alert("提示","查询失败","info");
+               }
+           });
+       }
+    });
+
+
+    $('#searchOrderCenter').linkbutton({
+        onClick:function(){
+            var orderCenter_Id=$('#orderCenter_Id').textbox('getValue');
+            var orderCenter_state=$('#orderCenter_state').combobox('getValue');
+            $.ajax({
+                url: 'expFindLibrary',
+                type: 'POST',
+                data: {
+                    "id": libraryId,
+                    "orderCenter_Id": orderCenter_Id,
+                    "orderCenter_state": orderCenter_state,
+
+                },
+                //traditional:true,
+                success: function (result) {
+                    $.messager.alert("提示", "查询成功", "info");
+                    $('#orderCenterTg').datagrid('loadData', result.data);
+                }
+                ,
+                error: function (result) {
+                    $.messager.alert("提示", "查询失败", "info");
+                }
+            });
+        }
+    });
+
+    function updateLibraryComeSend(id,type) {
+        $.ajax({
+            url: 'updateLibraryComeSend',
+            type: 'POST',
+            data: {
+                "id": id,
+                "type": type
+            },
+            success: function (result) {
+                $.messager.alert("提示", "发送成功", "info");
+            }
+            ,
+            error: function (result) {
+                $.messager.alert("提示", "发送失败", "info");
+            }
+        });
+    }
+
+    $('#orderUpate').linkbutton({
+        onClick:function () {
+            $.messager.alert("提示", "此功能暂未开发!(*￣?￣)", "info");
+        }
+    });
+
+    $('#multOrderDelete').linkbutton({
+        onClick:function () {
+            $.messager.alert("提示", "此功能暂未开发!(*￣?￣)", "info");
+        }
+    });
+
+    $('#orderCenterUpate').linkbutton({
+        onClick:function () {
+            $.messager.alert("提示", "此功能暂未开发!(*￣?￣)", "info");
+        }
+    });
+
+    $('#multOrderCenterDelete').linkbutton({
+        onClick:function () {
+            $.messager.alert("提示", "此功能暂未开发!(*￣?￣)", "info");
+        }
+    });
+
+
+    
+</script>
+</body>
+</html>

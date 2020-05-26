@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.java416.gmall.dao.BookKindMapper" >
+  <resultMap id="BaseResultMap" type="com.java416.gmall.bean.BookKind" >
+    <id column="b_id" property="bId" jdbcType="CHAR" />
+    <result column="b_name" property="bName" jdbcType="VARCHAR" />
+    <result column="b_state" property="bState" jdbcType="INTEGER" />
+    <result column="b_count" property="bCount" jdbcType="INTEGER" />
+    <result column="b_msg" property="bMsg" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    b_id, b_name, b_state, b_count, b_msg
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.java416.gmall.bean.BookKindExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from book_kind
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from book_kind
+    where b_id = #{bId,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from book_kind
+    where b_id = #{bId,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.java416.gmall.bean.BookKindExample" >
+    delete from book_kind
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.java416.gmall.bean.BookKind" >
+    insert into book_kind (b_id, b_name, b_state, 
+      b_count, b_msg)
+    values (#{bId,jdbcType=CHAR}, #{bName,jdbcType=VARCHAR}, #{bState,jdbcType=INTEGER}, 
+      #{bCount,jdbcType=INTEGER}, #{bMsg,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.java416.gmall.bean.BookKind" >
+    insert into book_kind
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bId != null" >
+        b_id,
+      </if>
+      <if test="bName != null" >
+        b_name,
+      </if>
+      <if test="bState != null" >
+        b_state,
+      </if>
+      <if test="bCount != null" >
+        b_count,
+      </if>
+      <if test="bMsg != null" >
+        b_msg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bId != null" >
+        #{bId,jdbcType=CHAR},
+      </if>
+      <if test="bName != null" >
+        #{bName,jdbcType=VARCHAR},
+      </if>
+      <if test="bState != null" >
+        #{bState,jdbcType=INTEGER},
+      </if>
+      <if test="bCount != null" >
+        #{bCount,jdbcType=INTEGER},
+      </if>
+      <if test="bMsg != null" >
+        #{bMsg,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.java416.gmall.bean.BookKindExample" resultType="java.lang.Integer" >
+    select count(*) from book_kind
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update book_kind
+    <set >
+      <if test="record.bId != null" >
+        b_id = #{record.bId,jdbcType=CHAR},
+      </if>
+      <if test="record.bName != null" >
+        b_name = #{record.bName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bState != null" >
+        b_state = #{record.bState,jdbcType=INTEGER},
+      </if>
+      <if test="record.bCount != null" >
+        b_count = #{record.bCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.bMsg != null" >
+        b_msg = #{record.bMsg,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update book_kind
+    set b_id = #{record.bId,jdbcType=CHAR},
+      b_name = #{record.bName,jdbcType=VARCHAR},
+      b_state = #{record.bState,jdbcType=INTEGER},
+      b_count = #{record.bCount,jdbcType=INTEGER},
+      b_msg = #{record.bMsg,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.java416.gmall.bean.BookKind" >
+    update book_kind
+    <set >
+      <if test="bName != null" >
+        b_name = #{bName,jdbcType=VARCHAR},
+      </if>
+      <if test="bState != null" >
+        b_state = #{bState,jdbcType=INTEGER},
+      </if>
+      <if test="bCount != null" >
+        b_count = #{bCount,jdbcType=INTEGER},
+      </if>
+      <if test="bMsg != null" >
+        b_msg = #{bMsg,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where b_id = #{bId,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.java416.gmall.bean.BookKind" >
+    update book_kind
+    set b_name = #{bName,jdbcType=VARCHAR},
+      b_state = #{bState,jdbcType=INTEGER},
+      b_count = #{bCount,jdbcType=INTEGER},
+      b_msg = #{bMsg,jdbcType=VARCHAR}
+    where b_id = #{bId,jdbcType=CHAR}
+  </update>
+</mapper>

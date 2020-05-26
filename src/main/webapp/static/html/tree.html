@@ -1,0 +1,758 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
+<head>
+    <title>图书管理页面</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script type="text/javascript" src="static/jquery-easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="static/jquery-easyui/jquery.easyui.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="static/css/comm.css"/>
+    <link type="text/css" rel="stylesheet" href="static/jquery-easyui/themes/default/easyui.css">
+    <link type="text/css" rel="stylesheet" href="static/jquery-easyui/themes/icon.css">
+    <script type="text/javascript" src="static/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
+</head>
+<body>
+<div class="easyui-layout" data-options="fit:true">
+    <div class="inner-header" data-options="region:'north'">
+        <a href="#" class="easyui-linkbutton" iconCls="icon-add" id="addBookKind">新增</a>&nbsp;
+        <a href="#" class="easyui-linkbutton" iconCls="icon-edit" id="updateBookKind">编辑</a>&nbsp;
+        <a href="#" class="easyui-linkbutton" iconCls="icon-remove" id="deleteBookKind">删除</a>
+    </div>
+    <div class="tree-div" data-options="region:'west'">
+        <div class="easyui-panel" title="图书种类列表" data-options="fit:true">
+            <ul  id="book_url">
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="inner-content" data-options="region:'center'">
+        <!-- 数据表 -->
+        <table class="easyui-datagrid" title="图书列表" fit="true" fitColumns="true"
+                toolbar="#toolbar2"
+               striped="true" rownumbers="true" pagination="true"  remoteSort="false" id="tg">
+
+        </table>
+        <!-- /数据表 -->
+
+        <!-- 数据表工具栏 -->
+        <div class="toolbar" id="toolbar2">
+            <div class="search-div">
+                <label>图书编号：</label>
+                <input type="text" class="easyui-textbox" id="bookInfoId"/>
+                <label>图书名称：</label>
+                <input type="text" class="easyui-textbox" id="bookInfoName"/>
+                <a href="#" class="easyui-linkbutton" iconCls="icon-search" id="searchBookInfo">搜索</a>
+            </div>
+            <div class="ctrl-div">
+                <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" id="bookInfoAdd">新增</a>
+                <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" id="bookInfoUpate">编辑</a>
+                <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" id="multBookInfoDelete">批量删除</a>
+            </div>
+        </div>
+        <!-- /数据表工具栏 -->
+    </div>
+</div>
+<!--图书种类添加-->
+<div id="win" class="easyui-dialog" title="图书种类添加"  style="width: 400px; padding: 10px 20px; height: 410px;"
+     closed="true" buttons="#dlg-buttons">
+    <form id="bookKindInfo" method="post">
+        <table cellpadding="5">
+            <tr>
+                <td>ID:</td>
+                <td><input id="bId" class="easyui-textbox" type="text" name="bId" data-options="required:true" validType='length[8,12]'></input></td>
+            </tr>
+            <tr>
+                <td>Name:</td>
+                <td><input class="easyui-textbox" type="text" name="bName" data-options="required:true" validType='length[3,10]'></input></td>
+            </tr>
+            <tr>
+                <td>State:</td>
+                <td>
+                    <select class="easyui-combobox" data-options="panelHeight:'auto'" data-options="required:true" name="bState" style="width: 120px; height: 40px;">
+                        <option value="1">上架</option>
+                        <option value="0">下架</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Count:</td>
+                <td><input class="easyui-textbox" type="text" name="bCount" data-options="required:true" validType='number'></input></td>
+            </tr>
+            <tr>
+                <td>Message:</td>
+                <td><input class="easyui-textbox" name="bMsg" data-options="multiline:true" style="height:60px"></input></td>
+            </tr>
+            </tr>
+        </table>
+        <div id="dlg-buttons" style="display: block">
+           <a id="confirm" href="javascript:void(0)" class="easyui-linkbutton c6" iconcls="icon-ok" onclick="submitForm()" style="width: 90px">提交</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-cancel" onclick="javascript:$('#win').dialog('close')" style="width: 90px">取消</a>
+        </div>
+    </form>
+</div>
+
+<!--图书添加-->
+<div id="bookInfo" class="easyui-dialog" title="图书添加"  style="width: 400px; padding: 10px 20px; height: 610px;"
+     closed="true" buttons="#book-buttons">
+    <form id="bookInfo_form" method="post" enctype="multipart/form-data">
+        <table cellpadding="5">
+            <tr>
+                <td>ID:</td>
+                <td><input id="bookId" class="easyui-textbox" type="text" name="bookId" data-options="required:true" validType='length[8,12]'></input></td>
+            </tr>
+            <tr>
+                <td>BookKind:</td>
+                <td>
+                    <select id="bookKind_id" name="bId" class="easyui-combobox" data-options="valueField:'bId', textField:'bName', panelHeight:'auto'" style="width: 140px; height: 40px;"></select>
+                </td>
+            </tr>
+            <tr>
+                <td>Name:</td>
+                <td><input class="easyui-textbox" id="bookName" type="text" name="bookName" data-options="required:true" validType='length[3,10]'></input></td>
+            </tr>
+            <tr>
+                <td>Auth:</td>
+                <td><input class="easyui-textbox" id="bookAuth" type="text" name="bookAuth" data-options="required:true" validType='length[3,10]'></input></td>
+            </tr>
+            <tr>
+                <td>Total:</td>
+                <td><input class="easyui-textbox" id="bookTotal" type="text" name="bookTotal" data-options="required:true" validType='number'></input></td>
+            </tr>
+            <tr>
+                <td>State:</td>
+                <td>
+                    <select class="easyui-combobox" name="bookState"  id="bookState" data-options="panelHeight:'auto'" style="width: 140px; height: 40px;">
+                        <option value="1">上架</option>
+                        <option value="0">下架</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Price:</td>
+                <td><input class="easyui-textbox" id="bookPrice" type="text" name="bookPrice" data-options="required:true" validType='mone'></input></td>
+            </tr>
+            <tr>
+                <td>Message:</td>
+                <td><input class="easyui-textbox" id="bookMsg" name="bookMsg" data-options="multiline:true" style="height:60px"></input></td>
+            </tr>
+            <tr>
+                <td>Img:</td>
+                <td><input class="easyui-filebox" id="file"  name="file" data-options="buttonText:'选择图片....',prompt:'图片....'" style="height:40px;width:200px"></input></td>
+            </tr>
+            </tr>
+        </table>
+        <div id="book-buttons" style="display: block">
+            <a id="bookInfo_sub" href="javascript:void(0)" class="easyui-linkbutton c6" iconcls="icon-ok" onclick="submitFormBookInfo()" style="width: 90px">提交</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-cancel" onclick="javascript:$('#bookInfo').dialog('close')" style="width: 90px">取消</a>
+        </div>
+    </form>
+</div>
+
+
+<script type="text/javascript">
+    var flag=false;
+    var bookInfo=false;
+    var isTemp="";
+    var bookId;
+    $(function(){
+        AjaxBookTree();
+    });
+
+
+    $.extend($.fn.validatebox.defaults.rules, {
+        CHS: {
+            validator: function (value, param) {
+                return /^[\u0391-\uFFE5]+$/.test(value);
+            },
+            message: '请输入汉字'
+        },
+        english : {// 验证英语
+            validator : function(value) {
+                return /^[A-Za-z]+$/i.test(value);
+            },
+            message : '请输入英文'
+        },
+        ip : {// 验证IP地址
+            validator : function(value) {
+                return /\d+\.\d+\.\d+\.\d+/.test(value);
+            },
+            message : 'IP地址格式不正确'
+        },
+        ZIP: {
+            validator: function (value, param) {
+                return /^[0-9]\d{5}$/.test(value);
+            },
+            message: '邮政编码不存在'
+        },
+        QQ: {
+            validator: function (value, param) {
+                return /^[1-9]\d{4,10}$/.test(value);
+            },
+            message: 'QQ号码不正确'
+        },
+        mobile: {
+            validator: function (value, param) {
+                return /^(?:13\d|15\d|18\d)-?\d{5}(\d{3}|\*{3})$/.test(value);
+            },
+            message: '手机号码不正确'
+        },
+        tel:{
+            validator:function(value,param){
+                return /^(\d{3}-|\d{4}-)?(\d{8}|\d{7})?(-\d{1,6})?$/.test(value);
+            },
+            message:'电话号码不正确'
+        },
+        mobileAndTel: {
+            validator: function (value, param) {
+                return /(^([0\+]\d{2,3})\d{3,4}\-\d{3,8}$)|(^([0\+]\d{2,3})\d{3,4}\d{3,8}$)|(^([0\+]\d{2,3}){0,1}13\d{9}$)|(^\d{3,4}\d{3,8}$)|(^\d{3,4}\-\d{3,8}$)/.test(value);
+            },
+            message: '请正确输入电话号码'
+        },
+        number: {
+            validator: function (value, param) {
+                return /^[0-9]+.?[0-9]*$/.test(value);
+            },
+            message: '请输入数字'
+        },
+        money:{
+            validator: function (value, param) {
+                return (/^(([1-9]\d*)|\d)(\.\d{1,2})?$/).test(value);
+            },
+            message:'请输入正确的金额'
+
+        },
+        mone:{
+            validator: function (value, param) {
+                return (/^(([1-9]\d*)|\d)(\.\d{1,2})?$/).test(value);
+            },
+            message:'请输入整数或小数'
+
+        },
+        integer:{
+            validator:function(value,param){
+                return /^[+]?[1-9]\d*$/.test(value);
+            },
+            message: '请输入最小为1的整数'
+        },
+        integ:{
+            validator:function(value,param){
+                return /^[+]?[0-9]\d*$/.test(value);
+            },
+            message: '请输入整数'
+        },
+        range:{
+            validator:function(value,param){
+                if(/^[1-9]\d*$/.test(value)){
+                    return value >= param[0] && value <= param[1]
+                }else{
+                    return false;
+                }
+            },
+            message:'输入的数字在{0}到{1}之间'
+        },
+        minLength:{
+            validator:function(value,param){
+                return value.length >=param[0]
+            },
+            message:'至少输入{0}个字'
+        },
+        maxLength:{
+            validator:function(value,param){
+                return value.length<=param[0]
+            },
+            message:'最多{0}个字'
+        },
+        //select即选择框的验证
+        selectValid:{
+            validator:function(value,param){
+                if(value == param[0]){
+                    return false;
+                }else{
+                    return true ;
+                }
+            },
+            message:'请选择'
+        },
+        idCode:{
+            validator:function(value,param){
+                return /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(value);
+            },
+            message: '请输入正确的身份证号'
+        },
+        loginName: {
+            validator: function (value, param) {
+                return /^[\u0391-\uFFE5\w]+$/.test(value);
+            },
+            message: '登录名称只允许汉字、英文字母、数字及下划线。'
+        },
+        equalTo: {
+            validator: function (value, param) {
+                return value == $(param[0]).val();
+            },
+            message: '两次输入的字符不一至'
+        },
+        englishOrNum : {// 只能输入英文和数字
+            validator : function(value) {
+                return /^[a-zA-Z0-9_ ]{1,}$/.test(value);
+            },
+            message : '请输入英文、数字、下划线或者空格'
+        },
+        xiaoshu:{
+            validator : function(value){
+                return /^(([1-9]+)|([0-9]+\.[0-9]{1,2}))$/.test(value);
+            },
+            message : '最多保留两位小数！'
+        },
+        ddPrice:{
+            validator:function(value,param){
+                if(/^[1-9]\d*$/.test(value)){
+                    return value >= param[0] && value <= param[1];
+                }else{
+                    return false;
+                }
+            },
+            message:'请输入1到100之间正整数'
+        },
+        jretailUpperLimit:{
+            validator:function(value,param){
+                if(/^[0-9]+([.]{1}[0-9]{1,2})?$/.test(value)){
+                    return parseFloat(value) > parseFloat(param[0]) && parseFloat(value) <= parseFloat(param[1]);
+                }else{
+                    return false;
+                }
+            },
+            message:'请输入0到100之间的最多俩位小数的数字'
+        },
+        rateCheck:{
+            validator:function(value,param){
+                if(/^[0-9]+([.]{1}[0-9]{1,2})?$/.test(value)){
+                    return parseFloat(value) > parseFloat(param[0]) && parseFloat(value) <= parseFloat(param[1]);
+                }else{
+                    return false;
+                }
+            },
+            message:'请输入0到1000之间的最多俩位小数的数字'
+        }
+    });
+
+
+    /*异步加载树的数据*/
+    function AjaxBookTree() {
+        $('#book_url').tree({
+            url:'menuTree/selectMenuTree',
+            onDblClick: function(node){/*
+                alert(node.id);*/
+                bookId=node.id;
+                $('#tg').datagrid('options').url='menuTree/bookInfo/'+node.id;
+                DataGrid(node.id);
+            }
+        });
+    }
+
+    /*根据图书种类加载图书*/
+    /*formatter:function(value,row,index){return '<img src="'+row.bookImg+'" />';}*/
+    function DataGrid(id) {
+        $('#tg').datagrid({
+            url:'menuTree/bookInfo/'+id,
+            columns:[[
+                {title: '全选', field: 'ck',checkbox : true, sortable: false},
+                {field:'bookId',align:'center',title:'图书ID',width:100},
+                {field:'bookName',align:'center',title:'图书名称',width:100},
+                {field:'bookAuth',align:'center',title:'图书作者',width:100},
+                {field:'bookTotal',align:'center',title:'图书数量',width:100},
+                {field:'bookState',align:'center',title:'图书状态',width:100},
+                {field:'bookPrice',align:'center',title:'图书价格',width:100},
+                {field:'bookMsg',align:'center',title:'图书描述',width:100},
+                {field:'bookSales',align:'center',title:'图书销量',width:100},
+                {field:'bookImg',align:'center',title:'图书图片',formatter:imgFormatter,width:100},
+
+            ]],
+            fitColumns:true,
+            pagination:true,
+            rowNumbers:true,
+            singleSelect: false,
+        });
+        /*var p = $('#tg').datagrid('getPager');
+        $(p).pagination({
+            pageSize: 10,//每页显示的记录条数，默认为10
+            pageList: [5, 10, 15],//可以设置每页记录条数的列表
+            beforePageText: '第',//页数文本框前显示的汉字
+            afterPageText: '页    共 {pages} 页',
+            displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录',
+        });*/
+    }
+
+    /*添加图书种类对话框*/
+    $('#addBookKind').linkbutton({
+        onClick:function(){
+            flag=true;
+            $('#bookKindInfo').form('clear');
+            $('#bId').textbox({
+                editable:true,
+            });
+            $('#win').dialog({
+                closed:false,
+                cache:false,
+                modal:true,
+                title:"图书种类添加",
+            });
+        }
+    });
+
+    /*ajax提交数据到后台*/
+    function submitForm() {
+        if (flag==true)
+        {
+            var v=$('#bookKindInfo').form('validate');
+            if (v){
+                $.ajax({
+                    type:"POST",
+                    url:'bookKind/add',
+                    data:$('#bookKindInfo').serialize(),
+                    success:function (result) {
+                        $.messager.alert("提示信息","操作成功!","info");
+                        $('#win').dialog('close',true);
+                        AjaxBookTree();
+                    },
+                    error:function (result) {
+                        $.messager.alert("提示信息","操作失败!","info");
+                        $('#win').dialog('close',true);
+                        AjaxBookTree();
+                    }
+                });
+            }else{
+                $.messager.alert("提示信息","请填写正确数据!","info");
+            }
+        }else{
+            $.ajax({
+                type:"POST",
+                url:'bookKind/update',
+                data:$('#bookKindInfo').serialize(),
+                success:function (result) {
+                    if (result.status==200){
+                        $.messager.alert("提示信息","操作成功!","info");
+                        $('#win').dialog('close',true);
+                        AjaxBookTree();
+                    }else{
+                        $.messager.alert("提示信息","操作失败!","info");
+                        $('#win').dialog('close',true);
+                        AjaxBookTree();
+                    }
+
+                },
+                error:function (result) {
+                    $.messager.alert("提示信息","操作失败!","info");
+                    $('#win').dialog('close',true);
+                    AjaxBookTree();
+                }
+            });
+        }
+
+    }
+    
+    /*图书种类修改*/
+    $('#updateBookKind').linkbutton({
+        onClick:function () {
+            var istemp=$('#book_url').tree('getSelected');
+            if (istemp==null){
+                alert("请选择要修改的图书!");
+            }else{
+                var temp=$('#book_url').tree('getSelected').id;
+                if (temp==0){
+                    alert("请选择要修改的图书!");
+                }else{
+                    flag=false;
+                    AjaxUpateBookKind(temp);
+                }
+            }
+        }
+    });
+
+    /*图书种类修改*/
+    function AjaxUpateBookKind(id) {
+        $.ajax({
+           url:'findBookById' ,
+            data:{"id":id},
+            type:'POST',
+            success:function (result) {
+                if (result.status==200){
+                    $('#win').dialog({
+                        closed:false,
+                        cache:false,
+                        modal:true,
+                        title:"图书种类修改",
+                    });
+                    $('#bookKindInfo').form('load',{
+                        bId:result.data.bId ,
+                        bName:result.data.bName,
+                        bState:result.data.bState==1?"上架":"下架",
+                        bCount:result.data.bCount,
+                        bMsg:result.data.bMsg,
+                    });
+
+                    $('#bId').textbox({
+                        editable:false,
+                    });
+                }else{
+                    $.messager.alert('提示',"没有相关数据!",'info');
+                }
+            }
+        });
+    }
+
+    /*选择图书种类*/
+    $('#deleteBookKind').linkbutton({
+        onClick:function () {
+            var isTemp=$('#book_url').tree('getSelected');
+            if (isTemp==null){
+                $.messager.alert('提示',"请选择需要删除的数据!",'info');
+            }else{
+                var temp=$('#book_url').tree('getSelected').id;
+                var text=$('#book_url').tree('getSelected').text;
+                if (temp ==0 || temp==""){
+                    alert("请选择要删除的图书!");
+                }
+                else{
+                    //flag=false;
+                    AjaxDeleteBookKind(temp,text);
+                }
+            }
+        }
+    });
+
+    /*图书种类删除*/
+    function AjaxDeleteBookKind(id,text) {
+        $.messager.confirm('提示','确定要删除:'+text+'吗?以及'+text+'下的所有图书?',function (flag) {
+            if (flag){
+                $.ajax({
+                   url:'deleteBookKind' ,
+                    type:'POST',
+                    data:{"id":id},
+                    success:function (result) {
+                        $.messager.alert('提示',result.message,'info');
+                        AjaxBookTree();
+                    },
+                    error:function (result) {
+                        $.messager.alert('提示',result.message,'info');
+                        AjaxBookTree();
+                    }
+                });
+            }else{
+                return;
+            }
+        });
+    }
+
+    /*图书添加打开*/
+    $('#bookInfoAdd').linkbutton({
+        onClick:function () {
+            bookInfo=true;
+            $('#bookInfo_form').form('clear');
+            $('#bookId').textbox({
+                editable:true,
+            });
+            $('#bookKind_id').textbox({
+                editable:true,
+            })
+            selectBookKind();
+            $('#bookInfo').dialog({
+                closed:false,
+                cache:false,
+                modal:true,
+                title:"图书添加",
+            });
+        }
+    });
+
+    /*查询出图书中类*/
+    function selectBookKind() {
+        $.ajax({
+           url: 'bookKind/selectAll',
+            type:'POST',
+            success:function (result) {
+                $('#bookKind_id').combobox('loadData',result.data);
+            },
+            error:function (result) {
+                alert(result);
+            }
+        });
+    }
+
+    /*图片加载*/
+    function imgFormatter(value,row,index) {
+        if(value == ''){
+            return '';
+        }else{
+            return '<img  style="display:block;margin:0 auto" src="upload/'+value+'" height="50" width="50" />';
+        }
+    }
+
+    /*图书添加*/
+    function submitFormBookInfo() {
+        var fd=new FormData($('#bookInfo_form')[0]);
+        if (bookInfo==true){
+            var v=$('#bookInfo').form('validate');
+            if (v){
+                $.ajax({
+                    url:'bookInfoAdd',
+                    type:'POST',
+                    data:fd,
+                    processData : false,
+                    contentType : false,
+                    success:function (result) {
+                        $.messager.alert("提示信息","操作成功!","info");
+                        $('#bookInfo').dialog('close',true);
+                        $('#bookInfo_form').form('clear');
+                        var node=$('#book_url').tree('find',fd.get("bId"));
+                        $('#book_url').tree('select',node.target);
+                        DataGrid(fd.get("bId"));
+
+                    },
+                    error:function (result) {
+                        $.messager.alert("提示信息","操作失败!","info");
+                    }
+                });
+            }else{
+                $.messager.alert("提示信息","请填写相应数据!","info");
+            }
+
+        }else{/*
+            alert(fd.get("bId"));*/
+            $.ajax({
+                url:'bookInfoUpdate',
+                type:'POST',
+                data:fd,
+                processData : false,
+                contentType : false,
+                success:function (result) {
+                    $.messager.alert("提示信息","操作成功!","info");
+                    $('#bookInfo').dialog('close',true);
+                    $('#bookInfo_form').form('clear');
+                    DataGrid(fd.get("bId"));
+
+                },
+                error:function (result) {
+                    $.messager.alert("提示信息","操作失败!","info");
+                }
+            });
+        }
+
+    }
+
+    /*单击修改*/
+    $('#bookInfoUpate').linkbutton({
+        onClick:function () {
+            bookInfo=false;
+            var temp=$('#tg').datagrid('getSelections').length;
+            if (temp ==1){
+                var rows=$('#tg').datagrid('getSelected').bookId;
+                bookInfoUpate(rows);
+            }else{
+                $.messager.alert("提示","请选择一行需要修改的数据!","info");
+            }
+        }
+    });
+
+    /*修改图书*/
+    function bookInfoUpate(id) {
+        $.ajax({
+            url: 'findBookInfoById',
+            data: {"id": id},
+            type: 'POST',
+            success: function (result) {
+                $('#bookInfo').dialog({
+                    closed: false,
+                    cache: false,
+                    modal: true,
+                    title: "图书修改",
+                });
+                $('#bookInfo_form').form('clear');
+                $('#bookInfo_form').form('load', {
+                    bookId: result.data.bookId,
+                    bId: result.data.bId,
+                    bookName:result.data.bookName,
+                    bookAuth: result.data.bookAuth,
+                    bookTotal: result.data.bookTotal,
+                    bookState: result.data.bookState == 1 ? "上架" : "下架",
+                    bookPrice: result.data.bookPrice,
+                    bookMsg:result.data.bookMsg,
+                    //file:result.data.bookImg,
+                });
+                $('#bookId').textbox({
+                    editable:false,
+                });
+                $('#bookKind_id').textbox({
+                    editable:false,
+                })
+            }
+        });
+    }
+
+    /*批量删除*/
+    $('#multBookInfoDelete').linkbutton({
+       onClick:function () {
+           var arry=[];
+           var temp=$('#tg').datagrid('getSelections');
+           if (temp ==0){
+               $.messager.alert("提示","请选择一行或者多行删除","info");
+           }else{
+
+               for (var i=0;i<temp.length;i++){
+                   arry.push(temp[i].bookId);
+               }
+               $.ajax({
+                  url:'multDeleteBookInfo' ,
+                   type:'POST',
+                   data:{multId:arry},
+                   traditional:true,
+                   success:function (result) {
+                       $.messager.alert("提示","删除成功","info");
+                       DataGrid(bookId);
+                   }
+                   ,
+                   error:function (result) {
+                       $.messager.alert("提示","删除失败","info");
+                   }
+               });
+           }
+       }
+    });
+
+    $('#searchBookInfo').linkbutton({
+        onClick:function () {
+            var arry=[];
+            var bookInfoId=$('#bookInfoId').textbox('getValue');
+            var bookInfoName=$('#bookInfoName').textbox('getValue');
+            if (bookId==null||bookId==""||bookId==undefined){
+                $.messager.alert("提示","请选择查询图书种类的图书!","info");
+            }else{
+                if ((bookInfoId==null||bookInfoId=="") && (bookInfoName==null||bookInfoName=="")){
+                    //$.messager.alert("提示","请输入查询图书条件!","info");
+                    DataGrid(bookId);
+                }else{
+                    // arry.push(bookInfoId);
+                    // arry.push(bookInfoName);
+                    $.ajax({
+                        url:'expFindBookInfo' ,
+                        type:'POST',
+                        data:{"bookInfoId":bookInfoId,"bookInfoName":bookInfoName},
+                        //traditional:true,
+                        success:function (result) {
+                            $.messager.alert("提示","查询成功","info");
+                            $('#tg').datagrid('loadData',result.data);
+                        }
+                        ,
+                        error:function (result) {
+                            $.messager.alert("提示","查询失败","info");
+                        }
+                    });
+                }
+            }
+        }
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!--导入的类什么的，我们不需要，直接删除-->
+    <!--<classPathEntry location="/Program Files/IBM/SQLLIB/java/db2java.zip" />-->
+
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+        <!--如果不配置这个，生成的文件会有很多的注释，不方便看代码-->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+
+        <!--配置数据库连接-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/gmall0248?useSSL=true&amp;serverTimezone=GMT"
+                        userId="root"
+                        password="123456">
+            <!--生成指定的表-->
+            <property name="nullCatalogMeansCurrent" value="true"/>
+        </jdbcConnection>
+        <!--配置数据库连接-->
+
+        <javaTypeResolver >
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+        <!--JAVA模型生成，指定javabean生成位置-->
+        <javaModelGenerator targetPackage="com.java416.gmall.bean" targetProject=".\src\main\java">
+            <!--JAVA模型生成，指定javabean生成位置-->
+            <property name="enableSubPackages" value="true" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <!--指定sql映射文件生成位置-->
+        <sqlMapGenerator targetPackage="mapper"  targetProject=".\src\main\resources">
+            <!--指定sql映射文件生成位置-->
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+
+        <!--指定dao生成的位置，mapper接口-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.java416.gmall.dao"  targetProject=".\src\main\java">
+            <!--指定dao生成的位置，mapper接口-->
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+        <!--table指定表的生成策略-->
+        <table tableName="waybill"></table>
+       <!-- <table tableName="book_manager"></table>-->
+
+    </context>
+</generatorConfiguration>

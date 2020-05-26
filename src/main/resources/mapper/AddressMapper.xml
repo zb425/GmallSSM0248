@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.java416.gmall.dao.AddressMapper" >
+  <resultMap id="BaseResultMap" type="com.java416.gmall.bean.Address" >
+    <id column="add_id" property="addId" jdbcType="CHAR" />
+    <result column="u_id" property="uId" jdbcType="CHAR" />
+    <result column="add_name" property="addName" jdbcType="VARCHAR" />
+    <result column="add_phone" property="addPhone" jdbcType="VARCHAR" />
+    <result column="add_code" property="addCode" jdbcType="VARCHAR" />
+    <result column="add_province" property="addProvince" jdbcType="VARCHAR" />
+    <result column="add_cicty" property="addCicty" jdbcType="VARCHAR" />
+    <result column="add_area" property="addArea" jdbcType="VARCHAR" />
+    <result column="add_adderss" property="addAdderss" jdbcType="VARCHAR" />
+    <result column="add_t_f" property="addTF" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    add_id, u_id, add_name, add_phone, add_code, add_province, add_cicty, add_area, add_adderss, 
+    add_t_f
+  </sql>
+  <select id="queryAddressBySql" parameterType="map" resultMap="BaseResultMap">
+    select * from address where u_id=#{id}  limit #{currIndex} , #{pageSize}
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.java416.gmall.bean.AddressExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from address
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from address
+    where add_id = #{addId,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from address
+    where add_id = #{addId,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.java416.gmall.bean.AddressExample" >
+    delete from address
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.java416.gmall.bean.Address" >
+    insert into address (add_id, u_id, add_name, 
+      add_phone, add_code, add_province, 
+      add_cicty, add_area, add_adderss, 
+      add_t_f)
+    values (#{addId,jdbcType=CHAR}, #{uId,jdbcType=CHAR}, #{addName,jdbcType=VARCHAR}, 
+      #{addPhone,jdbcType=VARCHAR}, #{addCode,jdbcType=VARCHAR}, #{addProvince,jdbcType=VARCHAR}, 
+      #{addCicty,jdbcType=VARCHAR}, #{addArea,jdbcType=VARCHAR}, #{addAdderss,jdbcType=VARCHAR}, 
+      #{addTF,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.java416.gmall.bean.Address" >
+    insert into address
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="addId != null" >
+        add_id,
+      </if>
+      <if test="uId != null" >
+        u_id,
+      </if>
+      <if test="addName != null" >
+        add_name,
+      </if>
+      <if test="addPhone != null" >
+        add_phone,
+      </if>
+      <if test="addCode != null" >
+        add_code,
+      </if>
+      <if test="addProvince != null" >
+        add_province,
+      </if>
+      <if test="addCicty != null" >
+        add_cicty,
+      </if>
+      <if test="addArea != null" >
+        add_area,
+      </if>
+      <if test="addAdderss != null" >
+        add_adderss,
+      </if>
+      <if test="addTF != null" >
+        add_t_f,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="addId != null" >
+        #{addId,jdbcType=CHAR},
+      </if>
+      <if test="uId != null" >
+        #{uId,jdbcType=CHAR},
+      </if>
+      <if test="addName != null" >
+        #{addName,jdbcType=VARCHAR},
+      </if>
+      <if test="addPhone != null" >
+        #{addPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="addCode != null" >
+        #{addCode,jdbcType=VARCHAR},
+      </if>
+      <if test="addProvince != null" >
+        #{addProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="addCicty != null" >
+        #{addCicty,jdbcType=VARCHAR},
+      </if>
+      <if test="addArea != null" >
+        #{addArea,jdbcType=VARCHAR},
+      </if>
+      <if test="addAdderss != null" >
+        #{addAdderss,jdbcType=VARCHAR},
+      </if>
+      <if test="addTF != null" >
+        #{addTF,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.java416.gmall.bean.AddressExample" resultType="java.lang.Integer" >
+    select count(*) from address
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update address
+    <set >
+      <if test="record.addId != null" >
+        add_id = #{record.addId,jdbcType=CHAR},
+      </if>
+      <if test="record.uId != null" >
+        u_id = #{record.uId,jdbcType=CHAR},
+      </if>
+      <if test="record.addName != null" >
+        add_name = #{record.addName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addPhone != null" >
+        add_phone = #{record.addPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addCode != null" >
+        add_code = #{record.addCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addProvince != null" >
+        add_province = #{record.addProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addCicty != null" >
+        add_cicty = #{record.addCicty,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addArea != null" >
+        add_area = #{record.addArea,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addAdderss != null" >
+        add_adderss = #{record.addAdderss,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addTF != null" >
+        add_t_f = #{record.addTF,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update address
+    set add_id = #{record.addId,jdbcType=CHAR},
+      u_id = #{record.uId,jdbcType=CHAR},
+      add_name = #{record.addName,jdbcType=VARCHAR},
+      add_phone = #{record.addPhone,jdbcType=VARCHAR},
+      add_code = #{record.addCode,jdbcType=VARCHAR},
+      add_province = #{record.addProvince,jdbcType=VARCHAR},
+      add_cicty = #{record.addCicty,jdbcType=VARCHAR},
+      add_area = #{record.addArea,jdbcType=VARCHAR},
+      add_adderss = #{record.addAdderss,jdbcType=VARCHAR},
+      add_t_f = #{record.addTF,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.java416.gmall.bean.Address" >
+    update address
+    <set >
+      <if test="uId != null" >
+        u_id = #{uId,jdbcType=CHAR},
+      </if>
+      <if test="addName != null" >
+        add_name = #{addName,jdbcType=VARCHAR},
+      </if>
+      <if test="addPhone != null" >
+        add_phone = #{addPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="addCode != null" >
+        add_code = #{addCode,jdbcType=VARCHAR},
+      </if>
+      <if test="addProvince != null" >
+        add_province = #{addProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="addCicty != null" >
+        add_cicty = #{addCicty,jdbcType=VARCHAR},
+      </if>
+      <if test="addArea != null" >
+        add_area = #{addArea,jdbcType=VARCHAR},
+      </if>
+      <if test="addAdderss != null" >
+        add_adderss = #{addAdderss,jdbcType=VARCHAR},
+      </if>
+      <if test="addTF != null" >
+        add_t_f = #{addTF,jdbcType=INTEGER},
+      </if>
+    </set>
+    where add_id = #{addId,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.java416.gmall.bean.Address" >
+    update address
+    set u_id = #{uId,jdbcType=CHAR},
+      add_name = #{addName,jdbcType=VARCHAR},
+      add_phone = #{addPhone,jdbcType=VARCHAR},
+      add_code = #{addCode,jdbcType=VARCHAR},
+      add_province = #{addProvince,jdbcType=VARCHAR},
+      add_cicty = #{addCicty,jdbcType=VARCHAR},
+      add_area = #{addArea,jdbcType=VARCHAR},
+      add_adderss = #{addAdderss,jdbcType=VARCHAR},
+      add_t_f = #{addTF,jdbcType=INTEGER}
+    where add_id = #{addId,jdbcType=CHAR}
+  </update>
+</mapper>

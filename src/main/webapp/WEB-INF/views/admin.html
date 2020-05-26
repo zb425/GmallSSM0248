@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
+<head>
+    <title>后台测试</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script type="text/javascript" src="static/jquery-easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="static/jquery-easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="static/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
+    <link type="text/css" rel="stylesheet" href="static/css/comm.css"/>
+    <link type="text/css" rel="stylesheet" href="static/jquery-easyui/themes/default/easyui.css">
+    <link type="text/css" rel="stylesheet" href="static/jquery-easyui/themes/icon.css">
+
+    <style type="text/css">
+        #sdiv {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 30px;
+            background-color: gray;
+        }
+
+        /*修改头部标题样式*/
+
+        #n_title {
+            color: white;
+            font-size: 14px;
+            line-height: 40px;
+        }
+
+        /*修改标题超链接样式*/
+
+        #n_title a {
+            text-decoration: none;
+            color: white;
+        }
+
+        #n_title a:hover {
+            color: orange;
+        }
+
+        /*修改密码样式*/
+
+        #div_pwd table {
+            margin: auto;
+            margin-top: 10px;
+        }
+
+        #div_pwd table tr {
+            height: 40px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="easyui-layout" id="layout" style="visibility:hidden;">
+
+<div data-options="region:'north'" style="height:50px;background-image: url(static/img/browser-hd-bg.gif);">
+    <!--添加网站Logo-->
+    <span id="n_logo" style="margin-left: 20px;">
+                <img src="static/img/blocks.gif" width="35px" style="margin-top: 5px;"/>
+                <font color="white" size="4px">1702网上书城系统</font>
+    </span>
+
+    <span id="n_title" style="float: right;">
+         欢迎admin登录&nbsp;&nbsp;&nbsp;
+         <a id="n_title_pwd" href="javascript:void(0)" onclick="updateAdminPassword();">修改密码</a>|
+         <a id="n_title_out" href="javascript:void(0)" onclick="userExit();">退出</a>
+    </span>
+</div>
+<div region="west" split="true" title="导航菜单" id="naver" style="width: 200px;">
+    <div class="easyui-accordion" fit="true" id="navmenu">
+        <div title="系统功能管理">
+            <ul class="navmenu">
+                <li class="active"><a href="#">首页</a></li>
+                <li><a href="#" data-url="static/html/tree.html">图书管理</a></li>
+                <li><a href="#" data-url="static/html/userInfo.html">用户管理</a></li>
+                <li><a href="#" data-url="static/html/shops.html">供应商管理</a></li>
+                <li><a href="#" data-url="static/html/order.html">订单管理</a></li>
+            </ul>
+        </div>
+        <div title="功能管理"></div>
+        <div title="功能管理"></div>
+        <div title="功能管理"></div>
+        <div title="关于我们">
+            <ul class="navmenu">
+                <li><a href="javascript:void(0);" data-url="">锁定行和列</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div region="center" id="content">
+    <div class="easyui-tabs" fit="true" id="tt">
+
+        <div title="首页" iconCls="icon-ok">
+            <p align="center" >
+            <h1 style="color: red; text-align: center;" align="center" >欢迎进入系统</h1>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+<div region="south" id="footer">某某后台管理系统 V1.0</div>
+
+<script type="text/javascript">
+    $(function () {
+        //添加新的Tab页
+        $("#navmenu").on("click", "a[data-url]", function (e) {
+            e.preventDefault();
+            var tabTitle = $(this).text();
+            var tabUrl = $(this).data("url");
+
+            if ($("#tt").tabs("exists", tabTitle)) { //判断该Tab页是否已经存在
+                $("#tt").tabs("select", tabTitle);
+            } else {
+                $("#tt").tabs("add", {
+                    title: tabTitle,
+                    href: tabUrl,
+                    closable: true
+                });
+            }
+            $("#navmenu .active").removeClass("active");
+            $(this).parent().addClass("active");
+        });
+
+        //解决闪屏的问题
+        window.setTimeout(function () {
+            $("#layout").css("visibility", "visible");
+        }, 800);
+    });
+
+    function userExit() {
+        $.messager.confirm("提示","确定要退出吗？",function (flag) {
+           if (flag){
+               window.location="http://localhost:8085/gmall";
+               return false;
+           }
+        });
+    }
+    
+    function updateAdminPassword() {
+        $.messager.alert("提示","不可以改密码!","info");
+    }
+</script>
+</body>
+</html>

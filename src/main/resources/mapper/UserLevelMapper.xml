@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.java416.gmall.dao.UserLevelMapper" >
+  <resultMap id="BaseResultMap" type="com.java416.gmall.bean.UserLevel" >
+    <id column="l_id" property="lId" jdbcType="CHAR" />
+    <result column="l_name" property="lName" jdbcType="VARCHAR" />
+    <result column="l_czzhi" property="lCzzhi" jdbcType="INTEGER" />
+    <result column="l_discount" property="lDiscount" jdbcType="REAL" />
+    <result column="l_meber" property="lMeber" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    l_id, l_name, l_czzhi, l_discount, l_meber
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.java416.gmall.bean.UserLevelExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from user_level
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_level
+    where l_id = #{lId,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from user_level
+    where l_id = #{lId,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.java416.gmall.bean.UserLevelExample" >
+    delete from user_level
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.java416.gmall.bean.UserLevel" >
+    insert into user_level (l_id, l_name, l_czzhi, 
+      l_discount, l_meber)
+    values (#{lId,jdbcType=CHAR}, #{lName,jdbcType=VARCHAR}, #{lCzzhi,jdbcType=INTEGER}, 
+      #{lDiscount,jdbcType=REAL}, #{lMeber,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.java416.gmall.bean.UserLevel" >
+    insert into user_level
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="lId != null" >
+        l_id,
+      </if>
+      <if test="lName != null" >
+        l_name,
+      </if>
+      <if test="lCzzhi != null" >
+        l_czzhi,
+      </if>
+      <if test="lDiscount != null" >
+        l_discount,
+      </if>
+      <if test="lMeber != null" >
+        l_meber,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="lId != null" >
+        #{lId,jdbcType=CHAR},
+      </if>
+      <if test="lName != null" >
+        #{lName,jdbcType=VARCHAR},
+      </if>
+      <if test="lCzzhi != null" >
+        #{lCzzhi,jdbcType=INTEGER},
+      </if>
+      <if test="lDiscount != null" >
+        #{lDiscount,jdbcType=REAL},
+      </if>
+      <if test="lMeber != null" >
+        #{lMeber,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.java416.gmall.bean.UserLevelExample" resultType="java.lang.Integer" >
+    select count(*) from user_level
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update user_level
+    <set >
+      <if test="record.lId != null" >
+        l_id = #{record.lId,jdbcType=CHAR},
+      </if>
+      <if test="record.lName != null" >
+        l_name = #{record.lName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lCzzhi != null" >
+        l_czzhi = #{record.lCzzhi,jdbcType=INTEGER},
+      </if>
+      <if test="record.lDiscount != null" >
+        l_discount = #{record.lDiscount,jdbcType=REAL},
+      </if>
+      <if test="record.lMeber != null" >
+        l_meber = #{record.lMeber,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update user_level
+    set l_id = #{record.lId,jdbcType=CHAR},
+      l_name = #{record.lName,jdbcType=VARCHAR},
+      l_czzhi = #{record.lCzzhi,jdbcType=INTEGER},
+      l_discount = #{record.lDiscount,jdbcType=REAL},
+      l_meber = #{record.lMeber,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.java416.gmall.bean.UserLevel" >
+    update user_level
+    <set >
+      <if test="lName != null" >
+        l_name = #{lName,jdbcType=VARCHAR},
+      </if>
+      <if test="lCzzhi != null" >
+        l_czzhi = #{lCzzhi,jdbcType=INTEGER},
+      </if>
+      <if test="lDiscount != null" >
+        l_discount = #{lDiscount,jdbcType=REAL},
+      </if>
+      <if test="lMeber != null" >
+        l_meber = #{lMeber,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where l_id = #{lId,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.java416.gmall.bean.UserLevel" >
+    update user_level
+    set l_name = #{lName,jdbcType=VARCHAR},
+      l_czzhi = #{lCzzhi,jdbcType=INTEGER},
+      l_discount = #{lDiscount,jdbcType=REAL},
+      l_meber = #{lMeber,jdbcType=VARCHAR}
+    where l_id = #{lId,jdbcType=CHAR}
+  </update>
+</mapper>

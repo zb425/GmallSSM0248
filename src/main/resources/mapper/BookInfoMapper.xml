@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.java416.gmall.dao.BookInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.java416.gmall.bean.BookInfo" >
+    <id column="book_id" property="bookId" jdbcType="CHAR" />
+    <result column="b_id" property="bId" jdbcType="CHAR" />
+    <result column="book_name" property="bookName" jdbcType="VARCHAR" />
+    <result column="book_auth" property="bookAuth" jdbcType="VARCHAR" />
+    <result column="book_total" property="bookTotal" jdbcType="INTEGER" />
+    <result column="book_state" property="bookState" jdbcType="INTEGER" />
+    <result column="book_price" property="bookPrice" jdbcType="REAL" />
+    <result column="book_msg" property="bookMsg" jdbcType="VARCHAR" />
+    <result column="book_sales" property="bookSales" jdbcType="INTEGER" />
+    <result column="book_img" property="bookImg" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    book_id, b_id, book_name, book_auth, book_total, book_state, book_price, book_msg, 
+    book_sales, book_img
+  </sql>
+  <select id="queryStudentsBySql" parameterType="map" resultMap="BaseResultMap">
+    select * from book_info
+    <where>
+      <if test="text!=0">
+        and b_id=#{text}
+      </if>
+      <if test="textName!=null and textName!=''">
+        and book_name like CONCAT('%',#{textName},'%')
+      </if>
+    </where>
+     limit #{currIndex} , #{pageSize}
+  </select>
+  <select id="queryBookInfoBySql" parameterType="map" resultMap="BaseResultMap">
+    select * from book_info where b_id=#{id}  limit #{currIndex} , #{pageSize}
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.java416.gmall.bean.BookInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from book_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from book_info
+    where book_id = #{bookId,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from book_info
+    where book_id = #{bookId,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.java416.gmall.bean.BookInfoExample" >
+    delete from book_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.java416.gmall.bean.BookInfo" >
+    insert into book_info (book_id, b_id, book_name, 
+      book_auth, book_total, book_state, 
+      book_price, book_msg, book_sales, 
+      book_img)
+    values (#{bookId,jdbcType=CHAR}, #{bId,jdbcType=CHAR}, #{bookName,jdbcType=VARCHAR}, 
+      #{bookAuth,jdbcType=VARCHAR}, #{bookTotal,jdbcType=INTEGER}, #{bookState,jdbcType=INTEGER}, 
+      #{bookPrice,jdbcType=REAL}, #{bookMsg,jdbcType=VARCHAR}, #{bookSales,jdbcType=INTEGER}, 
+      #{bookImg,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.java416.gmall.bean.BookInfo" >
+    insert into book_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bookId != null" >
+        book_id,
+      </if>
+      <if test="bId != null" >
+        b_id,
+      </if>
+      <if test="bookName != null" >
+        book_name,
+      </if>
+      <if test="bookAuth != null" >
+        book_auth,
+      </if>
+      <if test="bookTotal != null" >
+        book_total,
+      </if>
+      <if test="bookState != null" >
+        book_state,
+      </if>
+      <if test="bookPrice != null" >
+        book_price,
+      </if>
+      <if test="bookMsg != null" >
+        book_msg,
+      </if>
+      <if test="bookSales != null" >
+        book_sales,
+      </if>
+      <if test="bookImg != null" >
+        book_img,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bookId != null" >
+        #{bookId,jdbcType=CHAR},
+      </if>
+      <if test="bId != null" >
+        #{bId,jdbcType=CHAR},
+      </if>
+      <if test="bookName != null" >
+        #{bookName,jdbcType=VARCHAR},
+      </if>
+      <if test="bookAuth != null" >
+        #{bookAuth,jdbcType=VARCHAR},
+      </if>
+      <if test="bookTotal != null" >
+        #{bookTotal,jdbcType=INTEGER},
+      </if>
+      <if test="bookState != null" >
+        #{bookState,jdbcType=INTEGER},
+      </if>
+      <if test="bookPrice != null" >
+        #{bookPrice,jdbcType=REAL},
+      </if>
+      <if test="bookMsg != null" >
+        #{bookMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="bookSales != null" >
+        #{bookSales,jdbcType=INTEGER},
+      </if>
+      <if test="bookImg != null" >
+        #{bookImg,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.java416.gmall.bean.BookInfoExample" resultType="java.lang.Integer" >
+    select count(*) from book_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update book_info
+    <set >
+      <if test="record.bookId != null" >
+        book_id = #{record.bookId,jdbcType=CHAR},
+      </if>
+      <if test="record.bId != null" >
+        b_id = #{record.bId,jdbcType=CHAR},
+      </if>
+      <if test="record.bookName != null" >
+        book_name = #{record.bookName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bookAuth != null" >
+        book_auth = #{record.bookAuth,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bookTotal != null" >
+        book_total = #{record.bookTotal,jdbcType=INTEGER},
+      </if>
+      <if test="record.bookState != null" >
+        book_state = #{record.bookState,jdbcType=INTEGER},
+      </if>
+      <if test="record.bookPrice != null" >
+        book_price = #{record.bookPrice,jdbcType=REAL},
+      </if>
+      <if test="record.bookMsg != null" >
+        book_msg = #{record.bookMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bookSales != null" >
+        book_sales = #{record.bookSales,jdbcType=INTEGER},
+      </if>
+      <if test="record.bookImg != null" >
+        book_img = #{record.bookImg,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update book_info
+    set book_id = #{record.bookId,jdbcType=CHAR},
+      b_id = #{record.bId,jdbcType=CHAR},
+      book_name = #{record.bookName,jdbcType=VARCHAR},
+      book_auth = #{record.bookAuth,jdbcType=VARCHAR},
+      book_total = #{record.bookTotal,jdbcType=INTEGER},
+      book_state = #{record.bookState,jdbcType=INTEGER},
+      book_price = #{record.bookPrice,jdbcType=REAL},
+      book_msg = #{record.bookMsg,jdbcType=VARCHAR},
+      book_sales = #{record.bookSales,jdbcType=INTEGER},
+      book_img = #{record.bookImg,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.java416.gmall.bean.BookInfo" >
+    update book_info
+    <set >
+      <if test="bId != null" >
+        b_id = #{bId,jdbcType=CHAR},
+      </if>
+      <if test="bookName != null" >
+        book_name = #{bookName,jdbcType=VARCHAR},
+      </if>
+      <if test="bookAuth != null" >
+        book_auth = #{bookAuth,jdbcType=VARCHAR},
+      </if>
+      <if test="bookTotal != null" >
+        book_total = #{bookTotal,jdbcType=INTEGER},
+      </if>
+      <if test="bookState != null" >
+        book_state = #{bookState,jdbcType=INTEGER},
+      </if>
+      <if test="bookPrice != null" >
+        book_price = #{bookPrice,jdbcType=REAL},
+      </if>
+      <if test="bookMsg != null" >
+        book_msg = #{bookMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="bookSales != null" >
+        book_sales = #{bookSales,jdbcType=INTEGER},
+      </if>
+      <if test="bookImg != null" >
+        book_img = #{bookImg,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where book_id = #{bookId,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.java416.gmall.bean.BookInfo" >
+    update book_info
+    set b_id = #{bId,jdbcType=CHAR},
+      book_name = #{bookName,jdbcType=VARCHAR},
+      book_auth = #{bookAuth,jdbcType=VARCHAR},
+      book_total = #{bookTotal,jdbcType=INTEGER},
+      book_state = #{bookState,jdbcType=INTEGER},
+      book_price = #{bookPrice,jdbcType=REAL},
+      book_msg = #{bookMsg,jdbcType=VARCHAR},
+      book_sales = #{bookSales,jdbcType=INTEGER},
+      book_img = #{bookImg,jdbcType=VARCHAR}
+    where book_id = #{bookId,jdbcType=CHAR}
+  </update>
+</mapper>
