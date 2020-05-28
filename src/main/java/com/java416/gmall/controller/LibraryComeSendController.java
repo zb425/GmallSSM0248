@@ -1,9 +1,7 @@
 package com.java416.gmall.controller;
 
-import com.java416.gmall.bean.LibraryComeSend;
-import com.java416.gmall.bean.LibraryComeSendExample;
-import com.java416.gmall.bean.OrderBook;
-import com.java416.gmall.bean.OrderBookExample;
+import com.java416.gmall.bean.*;
+import com.java416.gmall.service.BookInfoService;
 import com.java416.gmall.service.LibraryComeSendService;
 import com.java416.gmall.service.OrderBookService;
 import com.java416.gmall.util.Messges;
@@ -26,6 +24,9 @@ public class LibraryComeSendController {
     @Autowired
     private OrderBookService orderBookService;
 
+    @Autowired
+    private BookInfoService bookInfoService;
+
     @RequestMapping("/libraryComeSendSelectAll/{id}")
     @ResponseBody
     public List<LibraryComeSend> libraryComeSendSelectAll(@PathVariable("id") String id){
@@ -38,7 +39,7 @@ public class LibraryComeSendController {
     @RequestMapping("/updateLibraryComeSend")
     @ResponseBody
     public Messges updateLibraryComeSend(@RequestParam("id") String id, @RequestParam("type") String type)throws  Exception{
-        System.out.println(id + " " +type);
+        /*System.out.println(id + " " +type);*/
         LibraryComeSend libraryComeSend = new LibraryComeSend();
         libraryComeSend.setLibraryCsId(id);
         libraryComeSend.setLibraryCsType(Integer.valueOf(type));
@@ -54,6 +55,18 @@ public class LibraryComeSendController {
             orderBook.setoSSstate(Integer.valueOf(type));
             int rows = orderBookService.updateByPrimaryKeySelective(orderBook);
             if(rows>0){
+                if(Integer.valueOf(type)==3){
+                    OrderBook book = orderBooks.get(0);
+                    BookInfo bookInfo = bookInfoService.selectByPrimaryKey(book.getBookId());
+                    BookInfo info = new BookInfo();
+                    info.setBookId(book.getBookId());
+                    info.setBookTotal(bookInfo.getBookTotal()+1);
+                    info.setBookSales(bookInfo.getBookSales()-1);
+                    int result = bookInfoService.updateByPrimaryKeySelective(info);
+                    if(result>0){
+                        return Messges.success();
+                    }
+                }
                 return Messges.success();
             }
         }

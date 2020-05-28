@@ -498,12 +498,31 @@ function myOrderAll(page,avageNum) {
                     //'<td>'+'<img src='+text+'>'+'</td>'+
                     '<td>'+result.data[menu].oTotal+'</td>'+
                     '<td>'+result.data[menu].oPay+'</td>'+
-                    '<td>'+result.data[menu].oDiscount+'</td>'+
-                    '<td>'+result.data[menu].oState+'</td>'+
-                    '<td>'+result.data[menu].oWuliucode+'</td>'+
-                    '<td>'+result.data[menu].oSSstate+'</td>'+
-                    '<td>'+'<span>'+'<a href="javascript:void(0);" onclick="comeback('+result.data[menu].oId+','+result.data[menu].bookId+');">删除</a>'+'</span>'+'</td>'+
-                    +'</tr>');
+                    '<td>'+result.data[menu].oDiscount+'</td>'+'</tr>');
+                if(result.data[menu].oState == "1"){
+                    $('<td>'+'成功'+'</td>').appendTo(div5);
+
+                }else{
+                   /*div5.append('<td>'+'失败'+'</td>')*/
+                    $('<td>'+'失败'+'</td>').appendTo(div5);
+                }
+                $('<td>'+result.data[menu].oWuliucode+'</td>').appendTo(div5);
+                if(result.data[menu].oSSstate=="0"){
+                    $('<td>'+'未发货'+'</td>').appendTo(div5);
+                }else if(result.data[menu].oSSstate=="1"){
+                    $('<td>'+'已发货'+'</td>').appendTo(div5);
+                }else if(result.data[menu].oSSstate=="2"){
+                    $('<td>'+'退货中'+'</td>').appendTo(div5);
+                }else if(result.data[menu].oSSstate=="3"){
+                    $('<td>'+'退货成功'+'</td>').appendTo(div5);
+                }else if(result.data[menu].oSSstate=="4"){
+                    $('<td>'+'收货成功'+'</td>').appendTo(div5);
+                }
+                $('<td>'+'<span>'+'<a href="javascript:void(0);" onclick="comeback('+result.data[menu].oId+','+result.data[menu].bookId+');">删除</a>'+'</span>'+'</td>').appendTo(div5);
+                //if(result.data[menu].oSSstate!="4"){
+                $('<td>'+'<span>'+'<a href="javascript:void(0);" onclick="returnOrder('+result.data[menu].oId+','+result.data[menu].bookId+','+result.data[menu].oSSstate+');">退货</a>'+'</span>'+'</td>').appendTo(div5);
+                $('<td>'+'<span>'+'<a href="javascript:void(0);" onclick="breakBookOrder('+result.data[menu].oId+','+result.data[menu].bookId+','+result.data[menu].oSSstate+');">收货</a>'+'</span>'+'</td>').appendTo(div5);
+              //  }
                 div5.appendTo(div3);
             }
             var div6=$('<div class="col-sm-6 col-md-6">\n' +
@@ -523,6 +542,7 @@ function myOrderAll(page,avageNum) {
     }
 }
 
+/*物理删除*/
 function comeback(id,book_id) {
     comeBackId=book_id;
     $.ajax({
@@ -538,6 +558,57 @@ function comeback(id,book_id) {
             alert("error");
         }
     });
+}
+
+/*退货请求*/
+function returnOrder(id,book_id,returnType) {
+    comeBackId=book_id;
+    if(returnType=="2"){
+        alert("你已在退货中....");
+    }else if(returnType=="3"){
+        alert("你已完成退货....");
+    }else if(returnType=="4"){
+        alert("你已收货成功....")
+    }else {
+        $.ajax({
+            url: "main/returnOrder",
+            method: "post",
+            data: {"u_id": id, "book_id": comeBackId},
+            success: function (result) {
+                alert("success");
+                myOrderAll(1, 9);
+            }
+            ,
+            error: function (result) {
+                alert("error");
+            }
+        });
+    }
+}
+
+function breakBookOrder(id,book_id,breakType) {
+    comeBackId=book_id;
+    if(breakType=="2"){
+        alert("你已在退货中,不可以收货....");
+    }else if(breakType=="3"){
+        alert("你已完成退货,不可以收货....");
+    }else if(breakType=="4"){
+        alert("你已收货成功,不需要在此收货....")
+    }else{
+        $.ajax({
+            url: "main/breakBookOrder",
+            method: "post",
+            data:{"u_id":id,"book_id":comeBackId},
+            success: function (result) {
+                alert("success");
+                myOrderAll(1,9);
+            }
+            ,
+            error:function (result) {
+                alert("error");
+            }
+        });
+    }
 }
 
 function getOrderAll() {

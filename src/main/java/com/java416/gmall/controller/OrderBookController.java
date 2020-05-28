@@ -113,7 +113,7 @@ public class OrderBookController {
                                    @RequestParam("oPay") String oPay,
                                    @RequestParam("bookId") String bookId,
                                     @RequestParam("u_id") String u_id) throws Exception {
-        System.out.println(bookId+" "+u_id);
+       // System.out.println(bookId+" "+u_id);
         String libraryID = getLibraryID(bookId);
         String id = insertLibrary(libraryID, bookName);
         int i = insertOrderBook(bookId, id, u_id, oTotal, oPay, oDiscount);
@@ -121,6 +121,13 @@ public class OrderBookController {
             String addressID = getAddressID(u_id);
             int rows = insertwuliId(addressID, id);
             if(rows>0){
+                BookInfo bookInfo = bookInfoService.selectByPrimaryKey(bookId);
+                bookInfo.setBookTotal(bookInfo.getBookTotal()-1);
+                bookInfo.setBookSales(bookInfo.getBookSales()+1);
+                int update = bookInfoService.updateByPrimaryKey(bookInfo);
+                if(update>0){
+                    return Messges.success();
+                }
                 return Messges.success();
             }
         }
@@ -146,7 +153,7 @@ public class OrderBookController {
         libraryComeSend.setLibraryCsId(str);
         libraryComeSend.setLibraryId(libraryId);
         libraryComeSend.setLibraryCsName(bookName);
-        libraryComeSend.setLibraryCsType(1);
+        libraryComeSend.setLibraryCsType(0);
         libraryComeSend.setLibraryCsCount(1);
         libraryComeSend.setLibraryCsTime(df.parse(df.format(new Date())));
         int insert = libraryComeSendService.insert(libraryComeSend);
@@ -239,13 +246,64 @@ public class OrderBookController {
     @ResponseBody
     public Messges updateOrderById(@RequestParam("u_id") String id,@RequestParam("book_id") String book_id){
         OrderBook orderBook = orderBookService.selectByPrimaryKey(id);
-        orderBook.setoSSstate(1);
+        orderBook.setoSSstate(5);
         int i = orderBookService.updateByPrimaryKey(orderBook);
         if(i>0){
-            BookInfo bookInfo = bookInfoService.selectByPrimaryKey(book_id);
+           /* BookInfo bookInfo = bookInfoService.selectByPrimaryKey(book_id);
             Integer bookSales = bookInfo.getBookSales();
             bookInfo.setBookSales(bookSales+1);
-            int rows = bookInfoService.updateByPrimaryKey(bookInfo);
+            int rows = bookInfoService.updateByPrimaryKey(bookInfo);*/
+            return Messges.success();
+        }
+        return Messges.error();
+    }
+
+    @RequestMapping("/main/returnOrder")
+    @ResponseBody
+    public Messges returnOrder(@RequestParam("u_id") String id,@RequestParam("book_id") String book_id){
+
+        /*System.out.println(id +"********" +book_id );*/
+        OrderBook returnBook = orderBookService.selectByPrimaryKey(id);
+        returnBook.setoSSstate(2);
+        int result = orderBookService.updateByPrimaryKey(returnBook);
+        if(result>0){
+            String libraryCsId = returnBook.getLibraryCsId();
+            LibraryComeSendExample example = new LibraryComeSendExample();
+            example.createCriteria().andLibraryCsIdEqualTo(libraryCsId);
+            List<LibraryComeSend> comeSend = libraryComeSendService.selectByExample(example);
+            LibraryComeSend send = comeSend.get(0);
+            LibraryComeSend libraryComeSend = new LibraryComeSend();
+            libraryComeSend.setLibraryCsId(send.getLibraryCsId());
+            libraryComeSend.setLibraryCsType(2);
+            int update = libraryComeSendService.updateByPrimaryKeySelective(libraryComeSend);
+            if(update>0){
+                return Messges.success();
+            }
+            return Messges.success();
+        }
+        return Messges.error();
+    }
+
+    @RequestMapping("/main/breakBookOrder")
+    @ResponseBody
+    public Messges breakBookOrder(@RequestParam("u_id") String id,@RequestParam("book_id") String book_id){
+
+        OrderBook breakOrder = orderBookService.selectByPrimaryKey(id);
+        breakOrder.setoSSstate(4);
+        int result = orderBookService.updateByPrimaryKey(breakOrder);
+        if(result>0){
+            String libraryCsId = breakOrder.getLibraryCsId();
+            LibraryComeSendExample example = new LibraryComeSendExample();
+            example.createCriteria().andLibraryCsIdEqualTo(libraryCsId);
+            List<LibraryComeSend> comeSend = libraryComeSendService.selectByExample(example);
+            LibraryComeSend send = comeSend.get(0);
+            LibraryComeSend libraryComeSend = new LibraryComeSend();
+            libraryComeSend.setLibraryCsId(send.getLibraryCsId());
+            libraryComeSend.setLibraryCsType(4);
+            int update = libraryComeSendService.updateByPrimaryKeySelective(libraryComeSend);
+            if(update>0){
+                return Messges.success();
+            }
             return Messges.success();
         }
         return Messges.error();

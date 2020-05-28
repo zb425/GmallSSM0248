@@ -18,6 +18,8 @@
             height: 100%;
             margin: 0;
             padding: 0;
+            background: url("static/images/login_img.jpg") bottom center #efeff4;
+            background-size: 100% 100%;
         }
 
         h1
@@ -38,7 +40,7 @@
             min-width: 400px;
             position: absolute;
             left: 40%;
-            top: 15%;
+            top: 20%;
             margin: 0;
             padding: 30px;
             background-color: white;
@@ -52,7 +54,7 @@
         }
     </style>
 </head>
-<body>
+<body background="static/images/login_img.jpg">
 <form action="" method="post" id="loginForm">
     <div>
         <h1>后台登录</h1>
@@ -67,7 +69,7 @@
         <input class="easyui-checkbox" id="box" name="box" checked="unchecked" onclick="isOnchage();" label="记住密码" labelPosition="after" labelWidth="70" />
     </div>-->
     <div>
-        <input class="easyui-linkbutton" type="button" onclick="ajaxSubmit()" value="登陆" style="width:100%;height:35px;" />
+        <input class="easyui-linkbutton" type="button" onclick="ajaxSubmit()" value="登陆" style="width:100%;height:35px;color: #16bce6;" />
     </div>
 </form>
 

@@ -113,7 +113,7 @@
         name : '发货'
     },{
         ruleCode : '2',
-        name : '确认退款'
+        name : '退款'
     },{
         ruleCode : '3',
         name : '退款成功'
@@ -172,13 +172,15 @@
 
     function orderCommen(text) {
         if (text=='1'){
-            return "已收货";
+            return "已发货";
         }else if (text == '0'){
             return "未收货";
         }else if (text == '2'){
             return "退货";
         }else if (text == '3'){
             return "退货成功"
+        }else if(text == '4'){
+            return "已收货";
         }
     }
 
@@ -275,8 +277,12 @@
             return "已发货";
         }else if (text =='0'){
             return "未发货";
-        }else{
-            return "进货";
+        }else if(text=='2'){
+            return "退货";
+        }else if(text == '3'){
+            return  "退货成功";
+        }else if(text == '4'){
+            return "已收货";
         }
     }
 

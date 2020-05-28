@@ -83,7 +83,7 @@
     o_paly, o_state, o_wuliucode, o_jf, o_momer, o_s_sstate, o_createtime, o_c_createtime
   </sql>
   <select id="queryOrderBySql" resultMap="BaseResultMap" parameterType="map">
-        select * from order_book where u_id=#{id} and o_s_sstate=0 limit #{currIndex} , #{pageSize}
+        select * from order_book where u_id=#{id} and o_s_sstate!=5 limit #{currIndex} , #{pageSize}
   </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.java416.gmall.bean.OrderBookExample" >
     select
